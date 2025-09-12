@@ -13,6 +13,9 @@ public class Player : MonoBehaviour
     public float bombTrailSpacing;
     public int numberOfTrailBombs;
 
+    //corner bomb variables
+    public float bombCornerSpacing = 1;
+    
     void Update()
     {
         float speed = 0.5f;
@@ -36,6 +39,12 @@ public class Player : MonoBehaviour
         {
             SpawnBombTrail(bombTrailSpacing, numberOfTrailBombs);
         }
+
+        //instantiate bomb at corner when press C
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            SpawnBombOnRandomCorner(bombCornerSpacing);
+        }
     }
 
     public void SpawnBombAtOffset (Vector2 inOffset)
@@ -53,6 +62,39 @@ public class Player : MonoBehaviour
 
             //place the bomb at the right position
             Instantiate(bombPrefab, placeOfBomb, Quaternion.identity);
+        }
+    }
+
+    public void SpawnBombOnRandomCorner(float inDistance)
+    {
+        //generate 4 numbers
+        float num1 = Random.Range(-1, 1);
+        float num2 = Random.Range(-1, 1);
+        float num3 = Random.Range(-1, 1);
+        float num4 = Random.Range(-1, 1);
+
+        Vector2 playerPos = transform.position;
+
+        //instantiate according to the numbers
+        //top left bomb
+        if (num1 < 0)
+        {
+            Instantiate(bombPrefab, new Vector2(playerPos.x - inDistance, playerPos.y + inDistance), Quaternion.identity);
+        }
+        //top right bomb
+        if (num2 < 0)
+        {
+            Instantiate(bombPrefab, new Vector2(playerPos.x + inDistance, playerPos.y + inDistance), Quaternion.identity);
+        }
+        //buttom left bomb
+        if (num3 < 0)
+        {
+            Instantiate(bombPrefab, new Vector2(playerPos.x - inDistance, playerPos.y - inDistance), Quaternion.identity);
+        }
+        //buttom right bomb
+        if (num4 < 0)
+        {
+            Instantiate(bombPrefab, new Vector2(playerPos.x + inDistance, playerPos.y - inDistance), Quaternion.identity);
         }
     }
 }
