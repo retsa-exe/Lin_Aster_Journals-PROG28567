@@ -15,6 +15,9 @@ public class Player : MonoBehaviour
 
     //corner bomb variables
     public float bombCornerSpacing = 1;
+
+    //wrap variables
+    public float wrapRatio = 0.5f;
     
     void Update()
     {
@@ -44,6 +47,12 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.C))
         {
             SpawnBombOnRandomCorner(bombCornerSpacing);
+        }
+
+        //start space wrap when press w
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            WarpPlayer(enemyTransform, wrapRatio);
         }
     }
 
@@ -96,5 +105,10 @@ public class Player : MonoBehaviour
         {
             Instantiate(bombPrefab, new Vector2(playerPos.x + inDistance, playerPos.y - inDistance), Quaternion.identity);
         }
+    }
+
+    public void WarpPlayer(Transform target, float ratio)
+    {
+        transform.position = Vector3.Lerp(transform.position, target.position, ratio);
     }
 }
