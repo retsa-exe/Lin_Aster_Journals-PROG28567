@@ -18,6 +18,10 @@ public class Player : MonoBehaviour
 
     //wrap variables
     public float wrapRatio = 0.5f;
+
+    //player variables
+    public float playerSpeed = 1;
+    public float maxRange = 2.5f;
     
     void Update()
     {
@@ -53,6 +57,20 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.W))
         {
             WarpPlayer(enemyTransform, wrapRatio);
+        }
+
+        //player movement
+        float horizontal = Input.GetAxis("Horizontal"); 
+        float vertical = Input.GetAxis("Vertical");
+
+        Vector3 moveDirection = new Vector3(horizontal, vertical, 0);
+
+        transform.position += moveDirection * playerSpeed * Time.deltaTime;
+
+        //press r to open the radar
+        if (Input.GetKey(KeyCode.R))
+        {
+            DetectAsteroids(maxRange, asteroidTransforms);
         }
     }
 
@@ -110,5 +128,26 @@ public class Player : MonoBehaviour
     public void WarpPlayer(Transform target, float ratio)
     {
         transform.position = Vector3.Lerp(transform.position, target.position, ratio);
+    }
+
+    public void DetectAsteroids(float inMaxRange, List<Transform> inAsteroids)
+    {
+        foreach (Transform asteroid in inAsteroids)
+        {
+            //calculate the distance between player and asteroids
+            Vector3 toAsteroid = asteroid.position - transform.position;
+
+            //detect if is in the range
+            if (toAsteroid.magnitude <= inMaxRange)
+            {
+                //normalized the direction
+                Vector3 lineDirection = toAsteroid.normalized;
+                Vector3 start = transform.position;
+                Vector3 end = start + lineDirection * 2.5f;
+
+                //draw the line
+                Debug.DrawLine(start, end, Color.green);
+            }
+        }
     }
 }
