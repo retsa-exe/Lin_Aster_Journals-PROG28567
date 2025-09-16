@@ -20,9 +20,19 @@ public class Player : MonoBehaviour
     public float wrapRatio = 0.5f;
 
     //player variables
-    public float playerSpeed = 1;
+    public float playerSpeed = 0;
     public float maxRange = 2.5f;
-    
+
+    //playermovement variables
+    public Vector3 velocity;
+    public float maxSpeed = 3f;
+    public float accelerationTime = 2f;
+    public float acceleration;
+
+    private void Start()
+    {
+        acceleration = maxSpeed / accelerationTime;
+    }
     void Update()
     {
         float speed = 0.5f;
@@ -59,13 +69,7 @@ public class Player : MonoBehaviour
             WarpPlayer(enemyTransform, wrapRatio);
         }
 
-        //player movement
-        float horizontal = Input.GetAxis("Horizontal"); 
-        float vertical = Input.GetAxis("Vertical");
-
-        Vector3 moveDirection = new Vector3(horizontal, vertical, 0);
-
-        transform.position += moveDirection * playerSpeed * Time.deltaTime;
+        PlayerMovement();
 
         //press r to open the radar
         if (Input.GetKey(KeyCode.R))
@@ -149,5 +153,43 @@ public class Player : MonoBehaviour
                 Debug.DrawLine(start, end, Color.green);
             }
         }
+    }
+
+    public void PlayerMovement()
+    {
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
+
+        Vector3 moveDirection = new Vector3(horizontal, vertical, 0);
+
+        velocity += moveDirection.normalized * acceleration * Time.deltaTime;
+
+        transform.position += velocity * playerSpeed * Time.deltaTime;
+
+        //Vector2 moveDirection = Vector2.zero;
+
+        //if (Input.GetKey(KeyCode.RightArrow))
+        //{
+        //    moveDirection += Vector2.right;
+        //}
+        //if (Input.GetKey(KeyCode.LeftArrow))
+        //{
+        //    moveDirection += Vector2.left;
+        //}
+        //if (Input.GetKey(KeyCode.UpArrow))
+        //{
+        //    moveDirection += Vector2.up;
+        //}
+        //if (Input.GetKey(KeyCode.DownArrow))
+        //{
+        //    moveDirection += Vector2.down;
+        //}
+
+        //moveDirection = moveDirection.normalized;
+        //velocity += (Vector3)moveDirection * acceleration * Time.deltaTime;
+
+        //transform.position += velocity * playerSpeed * Time.deltaTime;
+
+
     }
 }
