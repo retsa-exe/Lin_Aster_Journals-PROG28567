@@ -28,10 +28,13 @@ public class Player : MonoBehaviour
     public float maxSpeed = 3f;
     public float accelerationTime = 2f;
     public float acceleration;
+    public float decelerationTime = 2f;
+    public float deceleration;
 
     private void Start()
     {
         acceleration = maxSpeed / accelerationTime;
+        deceleration = maxSpeed / decelerationTime;
     }
     void Update()
     {
@@ -160,11 +163,18 @@ public class Player : MonoBehaviour
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
 
-        Vector3 moveDirection = new Vector3(horizontal, vertical, 0);
-
-        velocity += moveDirection.normalized * acceleration * Time.deltaTime;
+        if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.LeftArrow))
+        {
+            Vector3 moveDirection = new Vector3(horizontal, vertical, 0);
+            velocity += moveDirection.normalized * acceleration * Time.deltaTime;
+        }
+        else
+        {
+            velocity = Vector3.Lerp(velocity, Vector3.zero, Time.deltaTime * deceleration);
+        }
 
         transform.position += velocity * playerSpeed * Time.deltaTime;
+
 
         //Vector2 moveDirection = Vector2.zero;
 
