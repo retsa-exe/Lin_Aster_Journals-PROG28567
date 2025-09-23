@@ -31,6 +31,11 @@ public class Player : MonoBehaviour
     public float decelerationTime = 2f;
     public float deceleration;
 
+    //radar variabels 
+    public int numberOfPints = 3;
+    public float radius = 2f;
+    public Transform enemy;
+
     private void Start()
     {
         acceleration = maxSpeed / accelerationTime;
@@ -79,6 +84,8 @@ public class Player : MonoBehaviour
         {
             DetectAsteroids(maxRange, asteroidTransforms);
         }
+
+        PlayerRadar();
     }
 
     public void SpawnBombAtOffset (Vector2 inOffset)
@@ -201,5 +208,34 @@ public class Player : MonoBehaviour
         //transform.position += velocity * playerSpeed * Time.deltaTime;
 
 
+    }
+
+    public void PlayerRadar()
+    {
+        float degree = 360 / numberOfPints;
+
+        for (int i = 0; i < numberOfPints; i++)
+        {
+            float degreeOfA = i * degree;
+            float degreeOfB = (i + 1) * degree;
+
+            float radiansOfA = degreeOfA * Mathf.Deg2Rad;
+            float radiansOfB = degreeOfB * Mathf.Deg2Rad;
+
+            float xOfA = Mathf.Cos(radiansOfA);
+            float yOfA = Mathf.Sin(radiansOfA);
+            float xOfB = Mathf.Cos(radiansOfB);
+            float yOfB = Mathf.Sin(radiansOfB);
+
+            Vector3 ApointOnCircle = new Vector3(xOfA, yOfA, 0) * radius + transform.position;
+            Vector3 BpointOnCircle = new Vector3(xOfB, yOfB, 0) * radius + transform.position;
+
+            //if (Vector3.Distance(transform.position, ))
+            //{
+
+            //}
+
+            Debug.DrawLine(ApointOnCircle, BpointOnCircle, Color.green);
+        }
     }
 }
