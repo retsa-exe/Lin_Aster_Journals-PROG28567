@@ -230,12 +230,15 @@ public class Player : MonoBehaviour
             Vector3 ApointOnCircle = new Vector3(xOfA, yOfA, 0) * radius + transform.position;
             Vector3 BpointOnCircle = new Vector3(xOfB, yOfB, 0) * radius + transform.position;
 
-            //if (Vector3.Distance(transform.position, ))
-            //{
-
-            //}
-
-            Debug.DrawLine(ApointOnCircle, BpointOnCircle, Color.green);
+            if (Vector3.Distance(transform.position, enemy.position) < radius)
+            {
+                Debug.DrawLine(ApointOnCircle, BpointOnCircle, Color.red);
+            }
+            else
+            {
+                Debug.DrawLine(ApointOnCircle, BpointOnCircle, Color.green);
+            }
+                
         }
     }
 }
