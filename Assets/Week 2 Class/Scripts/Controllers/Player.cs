@@ -36,6 +36,11 @@ public class Player : MonoBehaviour
     public float radius = 2f;
     public Transform enemy;
 
+    //spawn power up variables
+    public GameObject powerup;
+    public float powerupRadius;
+    public int powerupNumbers;
+
     private void Start()
     {
         acceleration = maxSpeed / accelerationTime;
@@ -83,9 +88,14 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.R))
         {
             DetectAsteroids(maxRange, asteroidTransforms);
+            PlayerRadar();
         }
 
-        PlayerRadar();
+        //press p to spawn power-ups
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            SpawnPowerups(powerupRadius, powerupNumbers);
+        }
     }
 
     public void SpawnBombAtOffset (Vector2 inOffset)
@@ -212,7 +222,7 @@ public class Player : MonoBehaviour
 
     public void PlayerRadar()
     {
-        float degree = 360 / numberOfPints;
+        float degree = 360f / numberOfPints;
 
         for (int i = 0; i < numberOfPints; i++)
         {
@@ -239,6 +249,23 @@ public class Player : MonoBehaviour
                 Debug.DrawLine(ApointOnCircle, BpointOnCircle, Color.green);
             }
                 
+        }
+    }
+
+    public void SpawnPowerups(float radius, int numberOfPowerups)
+    {
+        float degreeOfPowerup = 360f / numberOfPowerups;
+
+        for (int i = 0; i < numberOfPowerups; i++)
+        {
+            float radiusOfPowerup = degreeOfPowerup * i * Mathf.Deg2Rad;
+
+            float x = Mathf.Cos(radiusOfPowerup);
+            float y = Mathf.Sin(radiusOfPowerup);
+
+            Vector3 pointOnCircle = new Vector3(x, y, 0) * radius + transform.position;
+
+            Instantiate(powerup, pointOnCircle, Quaternion.identity);
         }
     }
 }
